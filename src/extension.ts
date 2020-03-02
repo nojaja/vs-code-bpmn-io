@@ -237,3 +237,29 @@ function getViewType(provider: any) {
 function getUri(...p: string[]): vscode.Uri {
   return vscode.Uri.file(path.join(...p));
 }
+
+/**
+ * Find called file by process ID.
+ *
+ * @param processId
+ */
+async function findCalledFile(processId: String): Promise<Array<vscode.Uri>> {
+  const foundFiles: Array<vscode.Uri> = [];
+
+  // TODO(nikku): handle multiple matches;
+  // verify that match is actual bpmn:Process element
+  await vscode.workspace.findTextInFiles(
+    {
+      pattern: `id="${processId}"`,
+      isRegExp: false,
+      isMultiline: false
+    },
+    {
+      include: '**/*.bpmn',
+      maxResults: 1
+    },
+    result => foundFiles.push(result.uri)
+  );
+
+  return foundFiles;
+}
