@@ -46,6 +46,12 @@ npm run test
 
 The extension integration tests can also be executed from VS Code itself, simple choose the *Extension Tests* in the Debug mode.
 
+To create the vsix package file
+
+```bash
+npm run package
+```
+
 ## Go further
 
 * Get a [Quickstart](./docs/DEVELOPMENT_QUICKSTART.md) on how to develop VS Code extensions
