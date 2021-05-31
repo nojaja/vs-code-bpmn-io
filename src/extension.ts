@@ -9,6 +9,7 @@ import * as path from 'path';
 const fs = require('fs');
 
 import { EditingProvider } from './features/editing';
+import * as cheerio from 'cheerio';
 
 const editingType = 'bpmn-io.editing';
 
@@ -52,7 +53,7 @@ function createPanel(
     message => {
       switch (message.command) {
         case 'saveContent':
-          return saveFile(uri, message.content);
+          return saveFile(uri, message.content, message.svgContent);
       }
     },
     undefined,
@@ -62,10 +63,18 @@ function createPanel(
   return { panel, resource: uri, provider };
 }
 
-function saveFile(uri: vscode.Uri, content: String) {
+function saveFile(uri: vscode.Uri, content: String, svgContent:string) {
   const { fsPath: docPath } = uri.with({ scheme: 'vscode-resource' });
 
-  fs.writeFileSync(docPath, content, { encoding: 'utf8' });
+  const exportSVG = (svgContent:string) => {
+    const $ = cheerio.load(svgContent, {xmlMode: true});
+    const contentData = Buffer.from(content!);
+    const base64 = contentData.toString('base64');
+    $('svg').attr('content', base64);
+    return $.xml();
+  }
+  const bpmnXML = (docPath.lastIndexOf('svg')) ? exportSVG(svgContent) : content;
+  fs.writeFileSync(docPath, bpmnXML, { encoding: 'utf8' });
 }
 
 function refresh(
