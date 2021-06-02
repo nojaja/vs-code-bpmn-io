@@ -30,7 +30,8 @@
         "extensions": [
           ".bpmn2",
           ".bpmn",
-          ".bpmn20.xml"
+          ".bpmn20.xml",
+          ".bpmn.svg"
         ]
       }
     ],
@@ -117,6 +118,7 @@
   },
   "dependencies": {
     "bpmn-js": "^8.5.0",
+    "cheerio": "^1.0.0-rc.9",
     "vscode-codicons": "^0.0.17"
   }
 }
