@@ -104,10 +104,11 @@ export class BpmnModelerBuilder {
               const {
                 xml
               } = await bpmnModeler.saveXML({ format: true });
-
+              const {svg} = await bpmnModeler.saveSVG();
               return vscode.postMessage({
                 command: 'saveContent',
-                content: xml
+                content: xml,
+                svgContent: svg
               });
             } catch (err) {
               return console.error('could not save BPMN 2.0 diagram', err);
